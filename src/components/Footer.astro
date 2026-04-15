@@ -1,0 +1,37 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[#1a1a24] mt-24">
+  <div class="max-w-4xl mx-auto px-6 py-10">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-6 h-6 rounded bg-gradient-to-br from-violet-600 to-purple-700 flex items-center justify-center text-white text-xs font-bold" style="font-family: 'Noto Serif SC', serif">
+          韩
+        </div>
+        <span class="text-xs text-slate-600 tracking-[0.1em]">韩正新</span>
+      </div>
+
+      <!-- Links -->
+      <div class="flex items-center gap-6">
+        <a
+          href="https://github.com"
+          target="_blank"
+          rel="noopener"
+          class="text-slate-500 hover:text-violet-400 transition-colors text-xs tracking-wide no-underline"
+        >
+          GitHub
+        </a>
+        <a
+          href="mailto:hi@hanyiask.com"
+          class="text-slate-500 hover:text-violet-400 transition-colors text-xs tracking-wide no-underline"
+        >
+          邮箱
+        </a>
+        <span class="text-slate-700 text-xs">·</span>
+        <span class="text-slate-700 text-xs">&copy; {year}</span>
+      </div>
+    </div>
+  </div>
+</footer>

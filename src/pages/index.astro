@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latestPosts = sortedPosts.slice(0, 5);
+
+function postIdToSlug(id: string) {
+  return id.replace(/\.(md|mdx)$/, '');
+}
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<BaseLayout
+  title="韩正新 — AI 产品经理"
+  showSplash={true}
+>
+  <!-- ==================== HERO ==================== -->
+  <section class="relative min-h-[90vh] flex flex-col justify-center overflow-hidden">
+
+    <!-- 背景光晕 -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-0 right-1/4 w-[700px] h-[700px] rounded-full bg-violet-700/10 blur-[120px]"></div>
+      <div class="absolute bottom-0 left-1/4 w-[500px] h-[500px] rounded-full bg-purple-600/8 blur-[100px]"></div>
+      <div class="absolute inset-0 grid-pattern opacity-15"></div>
+    </div>
+
+    <!-- 右侧装饰大字 -->
+    <div class="absolute right-4 sm:right-12 top-1/2 -translate-y-1/2 text-[18rem] leading-none select-none pointer-events-none opacity-[0.04] font-bold" style="font-family: 'Noto Serif SC', serif; color: #8B5CF6;">
+      韩
+    </div>
+
+    <!-- 主内容（居中容器） -->
+    <div class="relative w-full max-w-[1120px] mx-auto px-8 sm:px-16 pt-24 pb-16">
+
+      <!-- 状态标签 -->
+      <div class="inline-flex items-center gap-2.5 mb-12 animate-fade-up">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+        <span class="text-[11px] tracking-[0.25em] uppercase text-slate-500 font-medium">
+          开放合作 · AI 产品经理
+        </span>
+      </div>
+
+      <!-- 名字大标题 -->
+      <div class="mb-10 animate-fade-up delay-100">
+        <h1 class="text-[clamp(3.5rem,12vw,8rem)] font-bold leading-[0.88] tracking-[-0.03em] mb-8">
+          <span class="block text-transparent bg-clip-text bg-gradient-to-b from-slate-100/90 to-slate-300/70">韩</span>
+          <span class="block text-transparent bg-clip-text bg-gradient-to-b from-slate-300/60 to-slate-500/40">正</span>
+          <span class="block text-transparent bg-clip-text bg-gradient-to-b from-violet-400/90 to-purple-500/70">新</span>
+        </h1>
+        <!-- 装饰线 -->
+        <div class="flex items-center gap-4">
+          <div class="h-px w-16 bg-gradient-to-r from-violet-500 to-transparent"></div>
+          <span class="text-[11px] tracking-[0.2em] uppercase text-slate-600">Hanyiask</span>
+        </div>
+      </div>
+
+      <!-- 副标题 -->
+      <div class="max-w-[560px] animate-fade-up delay-200">
+        <p class="text-[clamp(1rem,2vw,1.25rem)] text-slate-400 leading-relaxed mb-3">
+          在 AI 与产品之间，寻找高杠杆的技术变现路径。
+        </p>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          世界是个草台班子，但基础设施必须坚如磐石。
+        </p>
+      </div>
+
+      <!-- CTA 按钮 -->
+      <div class="flex flex-wrap gap-3 mt-10 animate-fade-up delay-300">
+        <a href="/blog" class="btn btn-primary group text-sm">
+          阅读文章
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+        <a href="/about" class="btn text-sm">关于我</a>
+        <a href="mailto:hi@hanyiask.com" class="btn text-sm">联系我</a>
+      </div>
+
+      <!-- 数据统计 -->
+      <div class="flex gap-10 mt-14 animate-fade-up delay-400">
+        {[
+          { num: '5年+', label: 'AI 行业' },
+          { num: '10+', label: '落地产品' },
+          { num: '∞', label: '好奇心' },
+        ].map(stat => (
+          <div>
+            <p class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">{stat.num}</p>
+            <p class="text-[11px] text-slate-600 mt-0.5 tracking-wide">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 滚动提示 -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in delay-700">
+      <span class="text-[10px] tracking-[0.2em] text-slate-700 uppercase">向下</span>
+      <div class="w-px h-10 bg-gradient-to-b from-slate-700 to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- ==================== LATEST POSTS ==================== -->
+  <section class="w-full py-24">
+    <div class="max-w-[1120px] mx-auto px-8 sm:px-16">
+
+      <!-- Section header -->
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-4">
+          <div class="w-8 h-px bg-violet-500"></div>
+          <span class="text-[11px] tracking-[0.2em] uppercase text-violet-400 font-medium">最新文章</span>
+        </div>
+        <a href="/blog" class="text-[11px] text-slate-600 hover:text-violet-400 transition-colors no-underline group flex items-center gap-1.5">
+          查看全部
+          <svg class="w-3 h-3 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+      <div class="h-px bg-[#1a1a24] mb-0"></div>
+
+      <!-- Posts -->
+      <div class="divide-y divide-[#1a1a24]">
+        {latestPosts.length === 0 ? (
+          <p class="text-slate-600 text-sm py-16 text-center">暂无文章，敬请期待。</p>
+        ) : (
+          latestPosts.map((post, i) => (
+            <article class="group animate-fade-up" style={`animation-delay: ${i * 80}ms`}>
+              <a
+                href={`/blog/${postIdToSlug(post.id)}`}
+                class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-7 pr-4 no-underline"
+              >
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-3 mb-1.5">
+                    <h2 class="text-[clamp(1rem,2vw,1.2rem)] font-medium text-slate-200 group-hover:text-white transition-colors leading-snug">
+                      {post.data.title}
+                    </h2>
+                    <svg class="w-4 h-4 text-violet-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                  <p class="text-sm text-slate-500 group-hover:text-slate-400 transition-colors line-clamp-1 leading-relaxed mb-2">
+                    {post.data.description}
+                  </p>
+                  {post.data.tags.length > 0 && (
+                    <div class="flex gap-2 flex-wrap">
+                      {post.data.tags.map(tag => (
+                        <span class="tag text-[10px] py-0.5 px-2">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div class="flex items-center gap-5 shrink-0">
+                  <time class="text-xs text-slate-600 font-mono hidden sm:block">
+                    {formatDate(post.data.pubDate)}
+                  </time>
+                  <div class="w-8 h-8 rounded-full border border-[#1a1a24] flex items-center justify-center group-hover:border-violet-500/40 group-hover:bg-violet-500/5 transition-all">
+                    <svg class="w-3.5 h-3.5 text-slate-600 group-hover:text-violet-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT TEASER ==================== -->
+  <section class="w-full pb-28">
+    <div class="max-w-[1120px] mx-auto px-8 sm:px-16">
+      <div class="h-px bg-[#1a1a24] mb-16"></div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-10 items-start max-w-[800px]">
+        <!-- Left -->
+        <div class="animate-fade-up">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-6 h-px bg-violet-500/60"></div>
+            <span class="text-[11px] tracking-[0.2em] uppercase text-slate-600">关于</span>
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600/30 to-purple-700/30 border border-violet-500/20 flex items-center justify-center">
+            <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-purple-300" style="font-family: 'Noto Serif SC', serif">韩</span>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="animate-fade-up delay-200">
+          <h2 class="text-xl font-semibold text-slate-200 mb-4">韩正新</h2>
+          <p class="text-sm text-slate-400 leading-loose mb-5">
+            AI 产品经理，白天做产品，晚上写代码。信奉优雅的基础架构和清晰的产品逻辑。
+            正在探索 AI 产品化的边界与可能性。
+          </p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            {['AI 产品', '技术变现', '基础设施', '系统设计'].map(t => (
+              <span class="tag text-[11px]">{t}</span>
+            ))}
+          </div>
+          <a href="/about" class="text-sm text-violet-400 hover:text-violet-300 transition-colors no-underline group flex items-center gap-1.5 w-fit">
+            完整介绍
+            <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

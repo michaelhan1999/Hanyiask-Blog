@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const allTags = [...new Set(sortedPosts.flatMap(post => post.data.tags))].sort();
+
+function postIdToSlug(id: string) {
+  return id.replace(/\.(md|mdx)$/, '');
+}
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<BaseLayout title="文章 — 韩正新" description="关于 AI、产品与技术变现的写作。">
+  <!-- 页面头部 -->
+  <div class="w-full pt-24 pb-16 px-8 sm:px-16">
+    <div class="max-w-[1120px] mx-auto">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-10 h-px bg-violet-500"></div>
+        <span class="text-[11px] tracking-[0.25em] uppercase text-violet-400 font-medium">归档</span>
+      </div>
+      <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] font-bold tracking-tight leading-[1] mb-6">
+        <span class="text-transparent bg-clip-text bg-gradient-to-b from-slate-100/90 to-slate-400/60">文章</span>
+      </h1>
+      <div class="flex items-center gap-4 text-sm text-slate-600">
+        <span>共 {sortedPosts.length} 篇</span>
+        <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+        <span>关于 AI、产品策略与技术实践</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标签 -->
+  {allTags.length > 0 && (
+    <div class="px-8 sm:px-16 mb-4">
+      <div class="max-w-[1120px] mx-auto">
+        <div class="flex flex-wrap gap-2 animate-fade-up delay-100">
+          <span class="tag bg-violet-600/10 border-violet-500/30 text-violet-400 cursor-default">全部</span>
+          {allTags.map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="h-px bg-[#1a1a24]"></div>
+
+  <!-- 文章列表 -->
+  <div class="max-w-[1120px] mx-auto px-8 sm:px-16 pb-24">
+    <div class="divide-y divide-[#1a1a24]">
+      {sortedPosts.map((post, i) => (
+        <article class="group animate-fade-up" style={`animation-delay: ${i * 60}ms`}>
+          <a
+            href={`/blog/${postIdToSlug(post.id)}`}
+            class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-7 pr-4 no-underline"
+          >
+            <!-- 序号 -->
+            <span class="text-[11px] text-slate-700 font-mono w-8 shrink-0 hidden sm:block">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+
+            <!-- 主内容 -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-3 mb-1.5">
+                <h2 class="text-[clamp(0.95rem,2vw,1.15rem)] font-medium text-slate-200 group-hover:text-white transition-colors leading-snug">
+                  {post.data.title}
+                </h2>
+                <svg class="w-4 h-4 text-violet-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </div>
+              <p class="text-sm text-slate-500 group-hover:text-slate-400 transition-colors line-clamp-1 leading-relaxed mb-2">
+                {post.data.description}
+              </p>
+              <div class="flex items-center gap-3 flex-wrap">
+                {post.data.tags.map(tag => (
+                  <span class="text-[10px] text-slate-600">{tag}</span>
+                ))}
+              </div>
+            </div>
+
+            <!-- 日期 + 箭头 -->
+            <div class="flex items-center gap-5 shrink-0">
+              <time class="text-xs text-slate-600 font-mono hidden sm:block">
+                {formatDate(post.data.pubDate)}
+              </time>
+              <div class="w-8 h-8 rounded-full border border-[#1a1a24] flex items-center justify-center group-hover:border-violet-500/40 group-hover:bg-violet-500/5 transition-all">
+                <svg class="w-3.5 h-3.5 text-slate-600 group-hover:text-violet-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    {sortedPosts.length === 0 && (
+      <div class="text-center py-24">
+        <p class="text-slate-600 text-sm">暂无文章，敬请期待。</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

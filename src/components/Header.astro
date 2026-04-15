@@ -1,0 +1,47 @@
+---
+const navLinks = [
+  { href: '/', label: '首页' },
+  { href: '/blog', label: '文章' },
+  { href: '/about', label: '关于' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50">
+  <div class="absolute inset-0 bg-[#05050a]/70 backdrop-blur-xl border-b border-[#1a1a24]/50"></div>
+
+  <div class="relative max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-3 group no-underline">
+      <div class="w-8 h-8 rounded-md bg-gradient-to-br from-violet-600 to-purple-700 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-violet-900/30 group-hover:shadow-violet-600/40 transition-shadow duration-300" style="font-family: 'Noto Serif SC', serif">
+        韩
+      </div>
+      <span class="text-sm font-semibold tracking-[0.1em] text-slate-200 group-hover:text-white transition-colors">
+        韩正新
+      </span>
+    </a>
+
+    <!-- Nav -->
+    <nav class="flex items-center gap-1">
+      {navLinks.map(({ href, label }) => {
+        const isActive = href === '/'
+          ? currentPath === '/'
+          : currentPath.startsWith(href);
+        return (
+          <a
+            href={href}
+            class:list={[
+              'px-4 py-2 text-sm rounded-md no-underline transition-all duration-200',
+              isActive
+                ? 'text-white bg-violet-600/15 shadow-sm shadow-violet-900/20'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+            ]}
+          >
+            {label}
+          </a>
+        );
+      })}
+    </nav>
+  </div>
+</header>
