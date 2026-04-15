@@ -1,106 +1,98 @@
 ---
-// Splash Screen v3 — 极致克制，一焦点，高级感
-// 参考：Hashkey / Linear / Vercel 风格
+// Splash Screen — 品牌启动动画 v0.0.1
 ---
 
-<div id="splash">
-  <div class="splash-inner">
-    <!-- 品牌标记 -->
-    <div class="splash-mark" id="splash-mark">
-      <span class="splash-hanzi">韩</span>
-    </div>
+<div id="splash" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#05050a]">
+  <!-- 背景网格 -->
+  <div class="absolute inset-0 grid-pattern opacity-30"></div>
 
-    <!-- 品牌名 -->
-    <div class="splash-name" id="splash-name">
-      <span>韩正新</span>
+  <!-- 光晕 -->
+  <div class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-violet-600/10 blur-3xl animate-pulse"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-purple-500/8 blur-3xl animate-pulse" style="animation-delay: 1s"></div>
+
+  <!-- 中心 Logo -->
+  <div class="relative mb-10">
+    <!-- 旋转光环 -->
+    <div class="absolute inset-0 rounded-full border border-violet-500/20 animate-spin" style="animation-duration: 8s"></div>
+    <!-- 反向旋转光环 -->
+    <div class="absolute inset-3 rounded-full border border-purple-500/10 animate-spin" style="animation-duration: 12s; animation-direction: reverse"></div>
+
+    <!-- Logo 主体 -->
+    <div class="relative w-24 h-24 flex items-center justify-center">
+      <span
+        id="logo-hanzi"
+        class="text-4xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-purple-300 opacity-0"
+        style="font-family: 'Noto Serif SC', serif;"
+      >
+        韩
+      </span>
     </div>
+  </div>
+
+  <!-- 品牌名 -->
+  <div class="text-center">
+    <h1
+      id="brand-name"
+      class="text-2xl font-bold tracking-[0.35em] text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-300 to-violet-400 mb-3 opacity-0"
+    >
+      韩 正 新
+    </h1>
+    <p
+      id="brand-tagline"
+      class="text-xs tracking-[0.3em] text-slate-500 opacity-0"
+    >
+      AI 产品经理 · 探索技术变现
+    </p>
+  </div>
+
+  <!-- 加载条 -->
+  <div class="absolute bottom-16 left-1/2 -translate-x-1/2 w-48">
+    <div class="h-px bg-slate-800 rounded-full overflow-hidden">
+      <div
+        id="load-bar"
+        class="h-full bg-gradient-to-r from-violet-600 to-purple-500 rounded-full"
+        style="width: 0%"
+      ></div>
+    </div>
+    <p class="text-center text-slate-600 text-[10px] tracking-[0.3em] mt-2">
+      加载中
+    </p>
   </div>
 </div>
 
-<style>
-  #splash {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: #05050a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .splash-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
-
-  /* 品牌标记：纯文字，无背景，无边框，紫色字 */
-  .splash-mark {
-    opacity: 0;
-    margin-bottom: 0;
-  }
-
-  .splash-hanzi {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #a78bfa;
-    letter-spacing: 0;
-    line-height: 1;
-    /* 微妙外发光 */
-    text-shadow: 0 0 24px rgba(139, 92, 246, 0.25);
-    display: block;
-  }
-
-  /* 品牌名：细体小字 */
-  .splash-name {
-    opacity: 0;
-    margin-top: 10px;
-    overflow: hidden;
-  }
-
-  .splash-name span {
-    display: block;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.35em;
-    color: #475569;
-    text-transform: uppercase;
-    padding-left: 0.35em; /* 补偿 letter-spacing */
-  }
-</style>
-
 <script>
-  const splash = document.getElementById('splash')!;
-  const mark = document.getElementById('splash-mark')!;
-  const name = document.getElementById('splash-name')!;
+  function runSplash() {
+    const splash = document.getElementById('splash');
+    const logoHanzi = document.getElementById('logo-hanzi');
+    const brandName = document.getElementById('brand-name');
+    const brandTagline = document.getElementById('brand-tagline');
+    const loadBar = document.getElementById('load-bar');
 
-  if (!sessionStorage.getItem('splashShown_v3')) {
-    // Timeline: 极度克制，只用 opacity 动画
-    // 0ms: mark appears
-    mark.style.transition = 'opacity 0.6s ease';
-    mark.style.opacity = '1';
+    const tl = [
+      () => { logoHanzi.style.transition = 'opacity 0.6s ease'; logoHanzi.style.opacity = '1'; },
+      () => { brandName.style.transition = 'opacity 0.5s ease'; brandName.style.opacity = '1'; },
+      () => { brandTagline.style.transition = 'opacity 0.5s ease'; brandTagline.style.opacity = '1'; },
+      () => { loadBar.style.transition = 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)'; loadBar.style.width = '60%'; },
+      () => { loadBar.style.width = '100%'; },
+      () => {
+        splash.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        splash.style.opacity = '0';
+        splash.style.transform = 'scale(1.02)';
+      },
+      () => { splash.style.display = 'none'; document.body.style.overflow = ''; },
+    ];
 
-    // 400ms: name fades in
-    name.style.transition = 'opacity 0.5s ease';
-    setTimeout(() => { name.style.opacity = '1'; }, 400);
+    const delays = [0, 300, 500, 700, 1900, 2100, 2700];
+    tl.forEach((fn, i) => setTimeout(fn, delays[i]));
+  }
 
-    // 1600ms: everything fades out together (短，不拖沓)
-    setTimeout(() => {
-      splash.style.transition = 'opacity 0.5s ease';
-      splash.style.opacity = '0';
-    }, 1600);
-
-    // 2100ms: gone
-    setTimeout(() => {
-      splash.style.display = 'none';
-      document.body.style.overflow = '';
-      sessionStorage.setItem('splashShown_v3', '1');
-    }, 2100);
+  document.body.style.overflow = 'hidden';
+  if (!sessionStorage.getItem('splashV1')) {
+    sessionStorage.setItem('splashV1', '1');
+    runSplash();
   } else {
-    splash.style.display = 'none';
+    const splash = document.getElementById('splash');
+    if (splash) { splash.style.display = 'none'; }
     document.body.style.overflow = '';
   }
 </script>
