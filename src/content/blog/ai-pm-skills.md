@@ -1,4 +1,5 @@
 ---
+lang: zh
 title: "AI 产品经理的能力模型"
 description: "从传统 PM 到 AI PM，需要补充哪些能力？一份关于 AI 产品经理核心竞争力的系统性思考。"
 pubDate: 2026-04-10

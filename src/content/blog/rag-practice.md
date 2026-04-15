@@ -1,4 +1,5 @@
 ---
+lang: zh
 title: "建構 RAG 系統的一些工程經驗"
 description: "RAG 是目前 LLM 應用落地的核心方案。實際建構過程中有哪些坑？怎麼優化？這篇講實戰。"
 pubDate: 2026-03-28

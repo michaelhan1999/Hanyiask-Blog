@@ -2,12 +2,12 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('blogTw');
+const allPosts = (await getCollection('blog')).filter(p => p.data.lang === 'tw');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const allTags = [...new Set(sortedPosts.flatMap(p => p.data.tags))].sort();
 
 function postIdToSlug(id: string) {
-  return id.replace(/\.(md|mdx)$/, '');
+  return id.replace(/^tw-/, '').replace(/\.(md|mdx)$/, '');
 }
 
 function formatDate(date: Date) {

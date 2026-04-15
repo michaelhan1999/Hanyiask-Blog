@@ -3,9 +3,12 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blogTw');
+  const posts = (await getCollection('blog')).filter(p => p.data.lang === 'tw');
   return posts.map(post => ({
-    params: { slug: post.id.replace(/\.(md|mdx)$/, '') },
+    params: {
+      // id like "tw-ai-pm-skills.md" → "ai-pm-skills"
+      slug: post.id.replace(/^tw-/, '').replace(/\.(md|mdx)$/, '')
+    },
     props: { post },
   }));
 }

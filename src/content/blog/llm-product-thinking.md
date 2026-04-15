@@ -1,4 +1,5 @@
 ---
+lang: zh
 title: "LLM 應用的產品化思考"
 description: "從技術到產品，LLM 應用落地有哪些獨特的挑戰？什麼時候該用 LLM，什麼時候不該用？"
 pubDate: 2026-04-05
