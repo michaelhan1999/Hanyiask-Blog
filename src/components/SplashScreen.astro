@@ -1,98 +1,187 @@
 ---
-// Splash Screen — 品牌启动动画
+// Splash Screen v2 — 紫光绽放
 ---
 
-<div id="splash" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#05050a]">
-  <!-- 背景网格 -->
-  <div class="absolute inset-0 grid-pattern opacity-30"></div>
+<div id="splash">
+  <!-- 纯黑背景 -->
+  <div class="splash-bg"></div>
 
-  <!-- 光晕 -->
-  <div class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-violet-600/10 blur-3xl animate-pulse"></div>
-  <div class="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-purple-500/8 blur-3xl animate-pulse" style="animation-delay: 1s"></div>
-
-  <!-- 中心 Logo -->
-  <div class="relative mb-10">
-    <!-- 旋转光环 -->
-    <div class="absolute inset-0 rounded-full border border-violet-500/20 animate-spin" style="animation-duration: 8s"></div>
-    <!-- 反向旋转光环 -->
-    <div class="absolute inset-3 rounded-full border border-purple-500/10 animate-spin" style="animation-duration: 12s; animation-direction: reverse"></div>
-
-    <!-- Logo 主体 -->
-    <div class="relative w-24 h-24 flex items-center justify-center">
-      <span
-        id="logo-hanzi"
-        class="text-4xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-purple-300 opacity-0"
-        style="font-family: 'Noto Serif SC', 'STSong', serif;"
-      >
-        韩
-      </span>
-    </div>
+  <!-- 中心发光核心 -->
+  <div class="splash-core">
+    <div class="splash-ring splash-ring-1"></div>
+    <div class="splash-ring splash-ring-2"></div>
+    <div class="splash-ring splash-ring-3"></div>
+    <div class="splash-dot"></div>
   </div>
 
-  <!-- 品牌名 -->
-  <div class="text-center">
-    <h1
-      id="brand-name"
-      class="text-2xl font-bold tracking-[0.35em] text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-300 to-violet-400 mb-3 opacity-0"
-    >
-      韩 正 新
-    </h1>
-    <p
-      id="brand-tagline"
-      class="text-xs tracking-[0.3em] text-slate-500 opacity-0"
-    >
-      AI 产品经理 · 探索技术变现
-    </p>
-  </div>
-
-  <!-- 加载条 -->
-  <div class="absolute bottom-16 left-1/2 -translate-x-1/2 w-48">
-    <div class="h-px bg-slate-800 rounded-full overflow-hidden">
-      <div
-        id="load-bar"
-        class="h-full bg-gradient-to-r from-violet-600 to-purple-500 rounded-full"
-        style="width: 0%"
-      ></div>
-    </div>
-    <p class="text-center text-slate-600 text-[10px] tracking-[0.3em] mt-2">
-      加载中
-    </p>
+  <!-- 文字层 -->
+  <div class="splash-text">
+    <div class="splash-hanzi" id="splash-hanzi">韩</div>
+    <div class="splash-name" id="splash-name">韩正新</div>
+    <div class="splash-divider" id="splash-divider"></div>
+    <div class="splash-tagline" id="splash-tagline">AI 产品经理 · 探索高杠杆的技术变现</div>
   </div>
 </div>
 
+<style>
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .splash-bg {
+    position: absolute;
+    inset: 0;
+    background: #05050a;
+  }
+
+  /* 中心发光核心 */
+  .splash-core {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .splash-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8B5CF6;
+    box-shadow: 0 0 20px #8B5CF6, 0 0 40px rgba(139,92,246,0.5);
+    position: absolute;
+    opacity: 0;
+  }
+
+  .splash-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(139,92,246,0.4);
+    opacity: 0;
+  }
+
+  .splash-ring-1 { width: 40px; height: 40px; }
+  .splash-ring-2 { width: 80px; height: 80px; border-color: rgba(139,92,246,0.25); }
+  .splash-ring-3 { width: 130px; height: 130px; border-color: rgba(139,92,246,0.12); }
+
+  /* 文字 */
+  .splash-text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    opacity: 0;
+  }
+
+  .splash-hanzi {
+    font-size: 3rem;
+    font-weight: 700;
+    color: transparent;
+    background: linear-gradient(135deg, #a78bfa, #8B5CF6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-family: 'Noto Serif SC', serif;
+    text-shadow: 0 0 40px rgba(139,92,246,0.4);
+  }
+
+  .splash-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: #e5e5e5;
+    padding-left: 0.4em;
+    margin-bottom: 16px;
+  }
+
+  .splash-divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #8B5CF6, transparent);
+    margin-bottom: 12px;
+  }
+
+  .splash-tagline {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: #64748b;
+    text-align: center;
+    max-width: 280px;
+  }
+</style>
+
 <script>
   function runSplash() {
-    const splash = document.getElementById('splash');
-    const logoHanzi = document.getElementById('logo-hanzi');
-    const brandName = document.getElementById('brand-name');
-    const brandTagline = document.getElementById('brand-tagline');
-    const loadBar = document.getElementById('load-bar');
+    const splash = document.getElementById('splash')!;
+    const dot = splash.querySelector('.splash-dot') as HTMLElement;
+    const ring1 = splash.querySelector('.splash-ring-1') as HTMLElement;
+    const ring2 = splash.querySelector('.splash-ring-2') as HTMLElement;
+    const ring3 = splash.querySelector('.splash-ring-3') as HTMLElement;
+    const text = splash.querySelector('.splash-text') as HTMLElement;
 
-    const tl = [
-      // 0ms: logo 出现
-      () => { logoHanzi.style.transition = 'opacity 0.6s ease'; logoHanzi.style.opacity = '1'; },
-      // 300ms: 品牌名
-      () => { brandName.style.transition = 'opacity 0.5s ease'; brandName.style.opacity = '1'; },
-      // 500ms: 副标题
-      () => { brandTagline.style.transition = 'opacity 0.5s ease'; brandTagline.style.opacity = '1'; },
-      // 700ms: 进度条开始
-      () => { loadBar.style.transition = 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)'; loadBar.style.width = '60%'; },
-      // 1900ms: 进度条完成
-      () => { loadBar.style.width = '100%'; },
-      // 2100ms:  splash 淡出
-      () => {
-        splash.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        splash.style.opacity = '0';
-        splash.style.transform = 'scale(1.02)';
-      },
-      // 2700ms: 移除 splash
-      () => { splash.style.display = 'none'; document.body.style.overflow = ''; },
-    ];
+    // 500ms: dot appears
+    setTimeout(() => { dot.style.transition = 'opacity 0.4s ease'; dot.style.opacity = '1'; }, 500);
 
-    const delays = [0, 300, 500, 700, 1900, 2100, 2700];
-    tl.forEach((fn, i) => setTimeout(fn, delays[i]));
+    // 700ms: ring 1 expands
+    setTimeout(() => {
+      ring1.style.transition = 'opacity 0.3s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1)';
+      ring1.style.opacity = '1';
+      ring1.style.transform = 'scale(1)';
+      ring1.style.animation = 'none';
+    }, 700);
+
+    // 900ms: ring 2
+    setTimeout(() => {
+      ring2.style.transition = 'opacity 0.3s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.3, 1)';
+      ring2.style.opacity = '1';
+      ring2.style.transform = 'scale(1)';
+    }, 900);
+
+    // 1100ms: ring 3
+    setTimeout(() => {
+      ring3.style.transition = 'opacity 0.4s ease, transform 1s cubic-bezier(0.2, 0.8, 0.3, 1)';
+      ring3.style.opacity = '1';
+      ring3.style.transform = 'scale(1)';
+    }, 1100);
+
+    // 1000ms: text appears
+    setTimeout(() => {
+      text.style.transition = 'opacity 0.6s ease';
+      text.style.opacity = '1';
+    }, 1000);
+
+    // 3000ms: everything fades out
+    setTimeout(() => {
+      splash.style.transition = 'opacity 0.7s ease';
+      splash.style.opacity = '0';
+    }, 3000);
+
+    // 3700ms: done
+    setTimeout(() => {
+      splash.style.display = 'none';
+      document.body.style.overflow = '';
+    }, 3700);
   }
 
   document.body.style.overflow = 'hidden';
-  runSplash();
+
+  // Prevent animation re-trigger on page transitions
+  if (!sessionStorage.getItem('splashShown')) {
+    sessionStorage.setItem('splashShown', '1');
+    runSplash();
+  } else {
+    // Skip splash if already shown this session
+    const splash = document.getElementById('splash')!;
+    splash.style.display = 'none';
+    document.body.style.overflow = '';
+  }
 </script>
