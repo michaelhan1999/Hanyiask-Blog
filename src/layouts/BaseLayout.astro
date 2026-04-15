@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import SplashScreen from '../components/SplashScreen.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 import HomeIcon from '../components/icons/HomeIcon.astro';
 import BlogIcon from '../components/icons/BlogIcon.astro';
 import AboutIcon from '../components/icons/AboutIcon.astro';
@@ -42,7 +43,7 @@ function isActive(href: string) {
     <link rel="canonical" href={Astro.url.href} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
 
     <title>{title}</title>
     <meta name="title" content={title} />
@@ -80,19 +81,20 @@ function isActive(href: string) {
             {link.icon === 'home' && <HomeIcon />}
             {link.icon === 'blog' && <BlogIcon />}
             {link.icon === 'about' && <AboutIcon />}
-            <span>{link.label}</span>
+            <span data-i18n={`nav_${link.icon}`}>{link.label}</span>
           </a>
         ))}
       </nav>
 
       <div class="sidebar-footer">
+        <LanguageSwitcher />
         <a href="mailto:hi@hanyiask.com" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          发送邮件
+          <span data-i18n="send_email">发送邮件</span>
         </a>
         <a href="https://github.com" target="_blank" rel="noopener" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          源代码
+          <span data-i18n="source_code">源代码</span>
         </a>
       </div>
     </aside>
