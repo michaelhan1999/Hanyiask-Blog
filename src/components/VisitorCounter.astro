@@ -1,0 +1,77 @@
+---
+// 访客计数器展示
+// 显示在页脚或侧边栏
+---
+
+<div class="visitor-counter" id="visitor-counter">
+  <div class="vc-dot"></div>
+  <div class="vc-content">
+    <span class="vc-label">访客</span>
+    <span class="vc-count" id="vc-count">--</span>
+  </div>
+</div>
+
+<script>
+  async function loadVisitorCount() {
+    const countEl = document.getElementById('vc-count');
+    if (!countEl) return;
+    try {
+      const res = await fetch('/api/visits');
+      if (res.ok) {
+        const data = await res.json();
+        countEl.textContent = data.total?.toLocaleString() || '0';
+      } else {
+        countEl.textContent = '0';
+      }
+    } catch {
+      countEl.textContent = '?';
+    }
+  }
+  loadVisitorCount();
+</script>
+
+<style>
+  .visitor-counter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+  }
+
+  .vc-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 8px rgba(16,185,129,0.6);
+    animation: vcPulse 2.5s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes vcPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .vc-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .vc-label {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .vc-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+    min-width: 30px;
+  }
+</style>

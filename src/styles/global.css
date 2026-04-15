@@ -205,6 +205,13 @@ body {
   gap: 8px;
 }
 
+.sidebar-footer-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
 .sidebar-footer-link {
   display: flex;
   align-items: center;
@@ -430,6 +437,32 @@ body {
   border-radius: 100px;
   transition: all 0.15s;
   letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16,185,129,0.6);
+  animation: tagPulse 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes tagPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.post-card-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
 }
 
 .post-tag:hover { border-color: var(--accent); color: var(--accent-light); }

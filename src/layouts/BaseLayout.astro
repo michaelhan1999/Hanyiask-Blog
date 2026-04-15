@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import SplashScreen from '../components/SplashScreen.astro';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import VisitorCounter from '../components/VisitorCounter.astro';
 import HomeIcon from '../components/icons/HomeIcon.astro';
 import BlogIcon from '../components/icons/BlogIcon.astro';
 import AboutIcon from '../components/icons/AboutIcon.astro';
@@ -93,7 +94,10 @@ function isActive(href: string) {
       </nav>
 
       <div class="sidebar-footer">
-        <LanguageSwitcher />
+        <div class="sidebar-footer-top">
+          <VisitorCounter />
+          <LanguageSwitcher />
+        </div>
         <a href="mailto:hi@hanyiask.com" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           {isTw ? '傳送郵件' : '发送邮件'}

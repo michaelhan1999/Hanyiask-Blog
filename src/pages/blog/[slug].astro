@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import Comments from '../../components/Comments.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -42,8 +43,11 @@ const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
     <header class="post-header animate-fade-up delay-100">
       {post.data.tags.length > 0 && (
         <div class="post-tags">
-          {post.data.tags.map(tag => (
-            <span class="post-tag-primary">{tag}</span>
+          {post.data.tags.map((tag, idx) => (
+            <span class="post-tag-primary">
+              {idx === 0 && <span class="tag-dot"></span>}
+              {tag}
+            </span>
           ))}
         </div>
       )}
@@ -83,6 +87,9 @@ const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
       </div>
       <a href="mailto:hi@hanyiask.com" class="btn btn-outline" style="align-self: center; font-size: 12px;">打个招呼</a>
     </div>
+
+    <!-- Comments -->
+    <Comments />
 
     <!-- Back -->
     <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border);">
