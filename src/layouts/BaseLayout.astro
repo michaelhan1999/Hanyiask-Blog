@@ -11,6 +11,7 @@ interface Props {
   description?: string;
   pubDate?: Date;
   showSplash?: boolean;
+  lang?: 'zh' | 'tw';
 }
 
 const {
@@ -18,24 +19,29 @@ const {
   description = 'AI 产品经理 | 探索高杠杆的技术变现',
   pubDate,
   showSplash = false,
+  lang = 'zh',
 } = Astro.props;
+
+const isTw = lang === 'tw';
+const base = isTw ? '/tw' : '';
+
+const navLinks = [
+  { href: `${base}/`, label: isTw ? '首頁' : '首页', icon: 'home' },
+  { href: `${base}/blog`, label: isTw ? '文章' : '文章', icon: 'blog' },
+  { href: `${base}/about`, label: isTw ? '關於' : '关于', icon: 'about' },
+];
 
 const pathname = Astro.url.pathname;
 
-const navLinks = [
-  { href: '/', label: '首页', icon: 'home' },
-  { href: '/blog', label: '文章', icon: 'blog' },
-  { href: '/about', label: '关于', icon: 'about' },
-];
-
 function isActive(href: string) {
-  if (href === '/') return pathname === '/';
-  return pathname.startsWith(href);
+  const fullHref = href.startsWith('http') ? href : `${base}${href}`;
+  if (href === '/') return pathname === `${base}/`;
+  return pathname.startsWith(`${base}${href}`);
 }
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={isTw ? 'zh-TW' : 'zh-CN'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -59,7 +65,7 @@ function isActive(href: string) {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    {showSplash && <SplashScreen />}
+    {showSplash && <SplashScreen lang={lang} />}
     <div id="progress-bar"></div>
 
     <!-- Sidebar -->
@@ -68,7 +74,7 @@ function isActive(href: string) {
         <div class="sidebar-brand-logo">韩</div>
         <div>
           <div class="sidebar-brand-name">韩正新</div>
-          <div class="sidebar-brand-title">AI 产品经理</div>
+          <div class="sidebar-brand-title">{isTw ? 'AI 產品經理' : 'AI 产品经理'}</div>
         </div>
       </div>
 
@@ -81,7 +87,7 @@ function isActive(href: string) {
             {link.icon === 'home' && <HomeIcon />}
             {link.icon === 'blog' && <BlogIcon />}
             {link.icon === 'about' && <AboutIcon />}
-            <span data-i18n={`nav_${link.icon}`}>{link.label}</span>
+            <span>{link.label}</span>
           </a>
         ))}
       </nav>
@@ -90,11 +96,11 @@ function isActive(href: string) {
         <LanguageSwitcher />
         <a href="mailto:hi@hanyiask.com" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          <span data-i18n="send_email">发送邮件</span>
+          {isTw ? '傳送郵件' : '发送邮件'}
         </a>
         <a href="https://github.com" target="_blank" rel="noopener" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          <span data-i18n="source_code">源代码</span>
+          {isTw ? '原始碼' : '源代码'}
         </a>
       </div>
     </aside>
@@ -107,7 +113,7 @@ function isActive(href: string) {
           <div class="sidebar-brand-name" style="font-size:12px;">韩正新</div>
         </div>
       </div>
-      <button class="mobile-menu-btn" id="menu-toggle" aria-label="菜单">
+      <button class="mobile-menu-btn" id="menu-toggle" aria-label={isTw ? '選單' : '菜单'}>
         <span></span><span></span><span></span>
       </button>
     </header>

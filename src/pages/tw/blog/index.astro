@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blogTw');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const allTags = [...new Set(sortedPosts.flatMap(p => p.data.tags))].sort();
 
@@ -11,15 +11,15 @@ function postIdToSlug(id: string) {
 }
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' });
+  return date.toLocaleDateString('zh-TW', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 ---
 
-<BaseLayout title="文章 — 韩正新" description="关于 AI、产品与技术变现的写作。" lang="zh">
+<BaseLayout title="文章 — 韩正新" description="關於 AI、產品與技術變現的寫作。" lang="tw">
   <div class="page-container">
     <header class="post-list-header animate-fade-up">
       <h1 class="post-list-title">文章</h1>
-      <p class="post-list-meta">共 {sortedPosts.length} 篇 · 关于 AI、产品策略与技术实践</p>
+      <p class="post-list-meta">共 {sortedPosts.length} 篇 · 關於 AI、產品策略與技術實踐</p>
     </header>
 
     {allTags.length > 0 && (
@@ -34,7 +34,7 @@ function formatDate(date: Date) {
     <div>
       {sortedPosts.map((post, i) => (
         <article class="animate-fade-up" style={`animation-delay: ${i * 60}ms`}>
-          <a href={`/blog/${postIdToSlug(post.id)}`} class="post-card">
+          <a href={`/tw/blog/${postIdToSlug(post.id)}`} class="post-card">
             <div class="post-card-header">
               <h2 class="post-card-title">{post.data.title}</h2>
               <div class="post-card-arrow">
@@ -56,7 +56,7 @@ function formatDate(date: Date) {
     </div>
 
     {sortedPosts.length === 0 && (
-      <p style="color: var(--text-muted); font-size: 14px; padding: 48px 0; text-align: center;">暂无文章，敬请期待。</p>
+      <p style="color: var(--text-muted); font-size: 14px; padding: 48px 0; text-align: center;">暫無文章，敬請期待。</p>
     )}
   </div>
 </BaseLayout>

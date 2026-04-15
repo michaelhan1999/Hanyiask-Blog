@@ -1,9 +1,9 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blogTw');
   return posts.map(post => ({
     params: { slug: post.id.replace(/\.(md|mdx)$/, '') },
     props: { post },
@@ -14,10 +14,9 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  return date.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// Only h2 and h3 for TOC
 const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
 ---
 
@@ -25,12 +24,11 @@ const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
   title={`${post.data.title} — 韩正新`}
   description={post.data.description}
   pubDate={post.data.pubDate}
-  lang="zh"
+  lang="tw"
 >
   <div class="page-container">
-    <!-- Back link -->
-    <div class="animate-fade-up" style="margin-bottom: 40px;">
-      <a href="/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;" class="group hover:text-accent-light">
+    <div style="margin-bottom: 40px;" class="animate-fade-up">
+      <a href="/tw/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;" class="group">
         <svg style="width: 14px; height: 14px; transition: transform 0.15s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
@@ -38,7 +36,6 @@ const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
       </a>
     </div>
 
-    <!-- Post header -->
     <header class="post-header animate-fade-up delay-100">
       {post.data.tags.length > 0 && (
         <div class="post-tags">
@@ -51,14 +48,13 @@ const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
       <div class="post-meta">
         <time datetime={post.data.pubDate.toISOString()} style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">{formatDate(post.data.pubDate)}</time>
         <span class="post-meta-sep">·</span>
-        <span style="font-size: 12px; color: var(--text-muted);">约 {post.data.description.length * 2} 字</span>
+        <span style="font-size: 12px; color: var(--text-muted);">約 {post.data.description.length * 2} 字</span>
       </div>
     </header>
 
-    <!-- TOC -->
     {tocItems.length > 0 && (
       <div class="toc-container animate-fade-up delay-200">
-        <p class="toc-title">目录</p>
+        <p class="toc-title">目錄</p>
         <ul class="toc-list">
           {tocItems.map(h => (
             <li style={h.depth === 3 ? 'padding-left: 12px;' : ''}>
@@ -69,24 +65,21 @@ const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
       </div>
     )}
 
-    <!-- Post content -->
     <div class="prose animate-fade-up delay-300">
       <Content />
     </div>
 
-    <!-- Author card -->
     <div class="author-card animate-fade-up delay-400">
       <div class="author-avatar">韩</div>
       <div class="author-info">
         <p class="author-name">韩正新</p>
-        <p class="author-bio">AI 产品经理。写关于技术、产品与构建东西的思考。</p>
+        <p class="author-bio">AI 產品經理。寫關於技術、產品與構建東西的思考。</p>
       </div>
-      <a href="mailto:hi@hanyiask.com" class="btn btn-outline" style="align-self: center; font-size: 12px;">打个招呼</a>
+      <a href="mailto:hi@hanyiask.com" class="btn btn-outline" style="align-self: center; font-size: 12px;">打了個招呼</a>
     </div>
 
-    <!-- Back -->
     <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border);">
-      <a href="/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;" class="group hover:text-accent-light">
+      <a href="/tw/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;">
         ← 返回文章列表
       </a>
     </div>

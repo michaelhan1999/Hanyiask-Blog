@@ -1,50 +1,55 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="关于 — 韩正新" description="AI 产品经理，探索技术与产品的交汇处。" lang="zh">
+<BaseLayout title="關於 — 韓正新" description="AI 產品經理，探索技術與產品的交匯處。" lang="tw">
   <div class="page-container">
 
-    <!-- Back -->
-    <div class="animate-fade-up" style="margin-bottom: 48px;">
-      <a href="/" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;">
-        ← 返回首页
+    <div style="margin-bottom: 48px;" class="animate-fade-up">
+      <a href="/tw/" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;">
+        ← 返回首頁
       </a>
     </div>
 
     <!-- Header -->
-    <header class="animate-fade-up delay-100" style="display: flex; align-items: center; gap: 20px; margin-bottom: 48px;">
+    <header style="display: flex; align-items: center; gap: 20px; margin-bottom: 48px;" class="animate-fade-up delay-100">
       <div style="width: 72px; height: 72px; border-radius: 16px; background: linear-gradient(135deg, rgba(139,92,246,0.3), rgba(109,40,217,0.3)); border: 1px solid rgba(139,92,246,0.2); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; color: var(--accent-light); box-shadow: 0 0 30px rgba(139,92,246,0.15); flex-shrink: 0; font-family: 'Noto Serif SC', serif;">
         韩
       </div>
       <div>
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-          <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary);">韩正新</h1>
+          <h1 style="font-size: 24px; font-weight: 700; color: var(--text-primary);">韓正新</h1>
           <span style="font-size: 10px; color: var(--accent-light); border: 1px solid rgba(139,92,246,0.3); padding: 2px 8px; border-radius: 100px;">AI PM</span>
         </div>
-        <p style="font-size: 13px; color: var(--text-muted);">在人工智能与产品之间，寻找高杠杆的技术变现路径。</p>
+        <p style="font-size: 13px; color: var(--text-muted);">在人工智慧與產品之間，尋找高槓桿的技術變現路徑。</p>
       </div>
     </header>
 
     <!-- Philosophy -->
-    <section class="about-section animate-fade-up delay-200">
-      <h2 class="about-section-title">理念</h2>
+    <section style="margin-bottom: 48px;" class="animate-fade-up delay-200">
+      <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px;">
+        <span style="width: 20px; height: 1px; background: var(--accent); opacity: 0.6; display: inline-block;"></span>
+        理念
+      </h2>
       <div style="padding: 28px 32px; background: var(--bg-card); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 0 10px 10px 0;">
         <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.8; font-style: italic;">
-          "世界是个草台班子，所有人都在即兴发挥，直到他们成功。
-          但当别人还在临场发挥的时候，我在搭建不会崩溃的系统。"
+          "世界是個草台班子，所有人都在即興發揮，直到他們成功。
+          但當別人還在臨場發揮的時候，我在搭建不會崩潰的系統。"
         </p>
       </div>
     </section>
 
     <!-- Skills -->
-    <section class="about-section animate-fade-up delay-300">
-      <h2 class="about-section-title">技术栈</h2>
+    <section style="margin-bottom: 48px;" class="animate-fade-up delay-300">
+      <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px;">
+        <span style="width: 20px; height: 1px; background: var(--accent); opacity: 0.6; display: inline-block;"></span>
+        技術棧
+      </h2>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
         {[
-          { cat: 'AI / 机器学习', items: ['LLM 与 Prompt 工程', 'RAG 系统', '模型微调', 'AI 产品策略'] },
-          { cat: '产品能力', items: ['PRD 与路线图', '用户研究', '数据驱动决策', 'GTM 策略'] },
-          { cat: '工程技能', items: ['TypeScript / Python', 'Cloudflare Workers', 'Docker 与 CI/CD', 'PostgreSQL'] },
+          { cat: 'AI / 機器學習', items: ['LLM 與 Prompt 工程', 'RAG 系統', '模型微調', 'AI 產品策略'] },
+          { cat: '產品能力', items: ['PRD 與路線圖', '用戶研究', '數據驅動決策', 'GTM 策略'] },
+          { cat: '工程技能', items: ['TypeScript / Python', 'Cloudflare Workers', 'Docker 與 CI/CD', 'PostgreSQL'] },
         ].map(g => (
           <div style="padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;">
             <p style="font-size: 11px; font-weight: 600; color: var(--accent-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.1em;">{g.cat}</p>
@@ -62,17 +67,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <!-- Projects -->
-    <section class="about-section animate-fade-up delay-400">
-      <h2 class="about-section-title">代表项目</h2>
+    <section style="margin-bottom: 48px;" class="animate-fade-up delay-400">
+      <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px;">
+        <span style="width: 20px; height: 1px; background: var(--accent); opacity: 0.6; display: inline-block;"></span>
+        代表項目
+      </h2>
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;">
           <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px;">
-            <h3 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">韩正新博客</h3>
+            <h3 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">韓正新部落格</h3>
             <span class="post-tag">2026</span>
           </div>
           <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px;">
-            这个网站。零成本、极速加载，基于 Astro + TailwindCSS，部署在 Cloudflare Pages。
-            极简紫黑主题，展示 AI 产品经理的技术思考。
+            這個網站。零成本、極速載入，基於 Astro + TailwindCSS，部署在 Cloudflare Pages。極簡紫黑主題，展示 AI 產品經理的技術思考。
           </p>
           <div style="display: flex; flex-wrap: wrap; gap: 6px;">
             {['Astro', 'TailwindCSS', 'Cloudflare Pages'].map(t => (
@@ -82,12 +89,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
         <div style="padding: 24px 28px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;">
           <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px;">
-            <h3 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">ContentSafe 内容保险箱</h3>
+            <h3 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">ContentSafe 內容保險箱</h3>
             <span class="post-tag">2025</span>
           </div>
           <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px;">
-            Android 离线阅读应用，支持头条、微信公众号、微博、知乎等平台内容保存与分类管理。
-            Kotlin + Jetpack Compose 构建。
+            Android 離線閱讀應用，支持頭條、微信公眾號、微博、知乎等平台內容保存與分類管理。Kotlin + Jetpack Compose 構建。
           </p>
           <div style="display: flex; flex-wrap: wrap; gap: 6px;">
             {['Kotlin', 'Jetpack Compose', 'Room', 'OkHttp'].map(t => (
@@ -99,12 +105,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <!-- Contact -->
-    <section class="about-section animate-fade-up delay-500">
-      <h2 class="about-section-title">联系我</h2>
+    <section class="animate-fade-up delay-500">
+      <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px;">
+        <span style="width: 20px; height: 1px; background: var(--accent); opacity: 0.6; display: inline-block;"></span>
+        聯繫我
+      </h2>
       <div style="padding: 28px 32px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
         <div>
           <p style="font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">期待合作</p>
-          <p style="font-size: 13px; color: var(--text-muted);">欢迎聊 AI 产品想法、项目合作，或任何有意思的话题。</p>
+          <p style="font-size: 13px; color: var(--text-muted);">歡迎聊 AI 產品想法、專案合作，或任何有意思的話題。</p>
         </div>
         <a href="mailto:hi@hanyiask.com" class="btn btn-primary">hi@hanyiask.com</a>
       </div>

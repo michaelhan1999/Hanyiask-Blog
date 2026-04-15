@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blogTw');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const latestPosts = sortedPosts.slice(0, 5);
 
@@ -11,15 +11,15 @@ function postIdToSlug(id: string) {
 }
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' });
+  return date.toLocaleDateString('zh-TW', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 ---
 
 <BaseLayout
-  title="韩正新 — AI 产品经理"
-  description="AI 产品经理 | 探索高杠杆的技术变现"
+  title="韩正新 — AI 產品經理"
+  description="AI 產品經理 | 探索高槓桿的技術變現"
   showSplash={true}
-  lang="zh"
+  lang="tw"
 >
   <div class="page-container">
     <!-- Hero -->
@@ -28,7 +28,7 @@ function formatDate(date: Date) {
 
       <div class="hero-label animate-fade-up">
         <div class="hero-label-dot"></div>
-        <span class="hero-label-text">开放合作 · AI 产品经理</span>
+        <span class="hero-label-text">開放合作 · AI 產品經理</span>
       </div>
 
       <h1 class="hero-title animate-fade-up delay-100">
@@ -36,24 +36,24 @@ function formatDate(date: Date) {
       </h1>
 
       <p class="hero-subtitle animate-fade-up delay-200">
-        在 AI 与产品之间，寻找高杠杆的技术变现路径。<br />
-        世界是个草台班子，但基础设施必须坚如磐石。
+        在 AI 與產品之間，尋找高槓桿的技術變現路徑。<br />
+        世界是個草台班子，但基礎設施必須堅如磐石。
       </p>
 
       <div class="hero-cta animate-fade-up delay-300">
-        <a href="/blog" class="btn btn-primary">
-          阅读文章
+        <a href="/tw/blog" class="btn btn-primary">
+          閱讀文章
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
           </svg>
         </a>
-        <a href="/about" class="btn btn-outline">关于我</a>
-        <a href="mailto:hi@hanyiask.com" class="btn btn-outline">联系我</a>
+        <a href="/tw/about" class="btn btn-outline">關於我</a>
+        <a href="mailto:hi@hanyiask.com" class="btn btn-outline">聯繫我</a>
       </div>
 
       <!-- Stats -->
       <div class="flex gap-10 mt-14 animate-fade-up delay-400" style="border-top: 1px solid var(--border); padding-top: 32px; margin-top: 32px;">
-        {[{ num: '5年+', label: 'AI 行业经验' }, { num: '10+', label: '落地产品' }, { num: '∞', label: '好奇心' }].map(s => (
+        {[{ num: '5年+', label: 'AI 行業界驗' }, { num: '10+', label: '落地產品' }, { num: '∞', label: '好奇心' }].map(s => (
           <div>
             <div class="text-2xl font-bold" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{s.num}</div>
             <div class="text-xs" style="color: var(--text-muted); margin-top: 2px;">{s.label}</div>
@@ -70,18 +70,18 @@ function formatDate(date: Date) {
         <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); font-weight: 600;">
           最新文章
         </h2>
-        <a href="/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.15s;" class="group">
+        <a href="/tw/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.15s;" class="group">
           查看全部 →
         </a>
       </div>
 
       <div>
         {latestPosts.length === 0 ? (
-          <p style="color: var(--text-muted); font-size: 14px; padding: 32px 0;">暂无文章，敬请期待。</p>
+          <p style="color: var(--text-muted); font-size: 14px; padding: 32px 0;">暫無文章，敬請期待。</p>
         ) : (
           latestPosts.map((post, i) => (
             <article class="animate-fade-up" style={`animation-delay: ${i * 80}ms`}>
-              <a href={`/blog/${postIdToSlug(post.id)}`} class="post-card">
+              <a href={`/tw/blog/${postIdToSlug(post.id)}`} class="post-card">
                 <div class="post-card-header">
                   <h3 class="post-card-title">{post.data.title}</h3>
                   <div class="post-card-arrow">
