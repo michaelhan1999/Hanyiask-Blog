@@ -1,31 +1,37 @@
 ---
-// 语言切换器 — 简中 / 繁中 双版本 URL 路由切换
+// Language Switcher — 三语切换器 简中 / 繁中 / English
 const currentPath = Astro.url.pathname;
-// 如果当前在 /tw/ 路径下，繁中为当前语言
 const isTraditional = currentPath.startsWith('/tw');
-const currentLang = isTraditional ? 'tw' : 'zh';
+const isEnglish = currentPath.startsWith('/en');
 ---
 
 <div class="lang-switcher" id="lang-switcher">
-  <button class="lang-btn" id="lang-btn" aria-label="選擇語言">
+  <button class="lang-btn" id="lang-btn" aria-label="Select Language">
     <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0 3-4.03 3-9s-1.343-9-3-9m-9 9a9 9 0 019-9"/>
     </svg>
-    <span id="lang-current">{isTraditional ? '繁體' : '简体'}</span>
+    <span id="lang-current">
+      {isEnglish ? 'English' : isTraditional ? '繁體' : '简体'}
+    </span>
     <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
     </svg>
   </button>
   <div class="lang-dropdown" id="lang-dropdown">
     <!-- 简体中文 -->
-    <a href="/" class="lang-option" data-lang="zh" style={!isTraditional ? 'color: var(--accent-light);' : ''}>
+    <a href="/" class="lang-option" data-lang="zh" style={!isTraditional && !isEnglish ? 'color: var(--accent-light);' : ''}>
       <span>简体中文</span>
-      <span class="lang-sub">简体</span>
+      <span class="lang-sub">ZH</span>
     </a>
     <!-- 繁体中文 -->
     <a href="/tw/" class="lang-option" data-lang="tw" style={isTraditional ? 'color: var(--accent-light);' : ''}>
       <span>繁體中文</span>
-      <span class="lang-sub">繁體</span>
+      <span class="lang-sub">TW</span>
+    </a>
+    <!-- English -->
+    <a href="/en/" class="lang-option" data-lang="en" style={isEnglish ? 'color: var(--accent-light);' : ''}>
+      <span>English</span>
+      <span class="lang-sub">EN</span>
     </a>
   </div>
 </div>

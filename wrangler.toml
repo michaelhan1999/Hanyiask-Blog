@@ -1,0 +1,7 @@
+name = "hanyiask-blog-api"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hanyiask-blog-comments"
+database_id = "b046e00b-1255-4c61-9aa4-f7cf460c8d73"

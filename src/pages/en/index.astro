@@ -1,9 +1,11 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = (await getCollection('blog')).filter(p => p.data.lang === 'zh');
-const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts
+  .filter(p => p.data.lang === 'en')
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const latestPosts = sortedPosts.slice(0, 5);
 
 function postIdToSlug(id: string) {
@@ -11,15 +13,15 @@ function postIdToSlug(id: string) {
 }
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' });
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 ---
 
 <BaseLayout
-  title="韩正新 — AI 产品经理"
-  description="AI 产品经理 | 探索高杠杆的技术变现"
+  title="Han Zhengxin — AI Product Manager"
+  description="AI Product Manager | Exploring high-leverage tech monetization"
   showSplash={true}
-  lang="zh"
+  lang="en"
 >
   <div class="page-container">
     <!-- Hero -->
@@ -28,32 +30,32 @@ function formatDate(date: Date) {
 
       <div class="hero-label animate-fade-up">
         <div class="hero-label-dot"></div>
-        <span class="hero-label-text">开放合作 · AI 产品经理</span>
+        <span class="hero-label-text">Open Collaboration · AI Product Manager</span>
       </div>
 
       <h1 class="hero-title animate-fade-up delay-100">
-        韩<span class="hero-title-accent">正新</span>
+        Han <span class="hero-title-accent">Zhengxin</span>
       </h1>
 
       <p class="hero-subtitle animate-fade-up delay-200">
-        在 AI 与产品之间，寻找高杠杆的技术变现路径。<br />
-        世界是个草台班子，但基础设施必须坚如磐石。
+        Finding high-leverage paths to tech monetization at the intersection of AI and product.<br />
+        The world is a improv stage, but your infrastructure must be rock-solid.
       </p>
 
       <div class="hero-cta animate-fade-up delay-300">
-        <a href="/blog" class="btn btn-primary">
-          阅读文章
+        <a href="/en/blog" class="btn btn-primary">
+          Read Articles
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
           </svg>
         </a>
-        <a href="/about" class="btn btn-outline">关于我</a>
-        <a href="mailto:hi@hanyiask.com" class="btn btn-outline">联系我</a>
+        <a href="/en/about" class="btn btn-outline">About Me</a>
+        <a href="mailto:hi@hanyiask.com" class="btn btn-outline">Contact</a>
       </div>
 
       <!-- Stats -->
       <div class="flex gap-10 mt-14 animate-fade-up delay-400" style="border-top: 1px solid var(--border); padding-top: 32px; margin-top: 32px;">
-        {[{ num: '5年+', label: 'AI 行业经验' }, { num: '10+', label: '落地产品' }, { num: '∞', label: '好奇心' }].map(s => (
+        {[{ num: '5+', label: 'Years in AI' }, { num: '10+', label: 'Products Shipped' }, { num: '∞', label: 'Curiosity' }].map(s => (
           <div>
             <div class="text-2xl font-bold" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{s.num}</div>
             <div class="text-xs" style="color: var(--text-muted); margin-top: 2px;">{s.label}</div>
@@ -68,20 +70,20 @@ function formatDate(date: Date) {
     <section>
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
         <h2 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); font-weight: 600;">
-          最新文章
+          Latest Articles
         </h2>
-        <a href="/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.15s;" class="group">
-          查看全部 →
+        <a href="/en/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.15s;" class="group">
+          View all →
         </a>
       </div>
 
       <div>
         {latestPosts.length === 0 ? (
-          <p style="color: var(--text-muted); font-size: 14px; padding: 32px 0;">暂无文章，敬请期待。</p>
+          <p style="color: var(--text-muted); font-size: 14px; padding: 32px 0;">No articles yet. Stay tuned.</p>
         ) : (
           latestPosts.map((post, i) => (
             <article class="animate-fade-up" style={`animation-delay: ${i * 80}ms`}>
-              <a href={`/blog/${postIdToSlug(post.id)}`} class="post-card">
+              <a href={`/en/blog/${postIdToSlug(post.id)}`} class="post-card">
                 <div class="post-card-header">
                   <h3 class="post-card-title">{post.data.title}</h3>
                   <div class="post-card-arrow">

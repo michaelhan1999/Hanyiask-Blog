@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog')).filter(p => p.data.lang === 'en');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allTags = [...new Set(sortedPosts.flatMap(p => p.data.tags))].sort();
+
+function postIdToSlug(id: string) {
+  return id.replace(/\.(md|mdx)$/, '');
+}
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+---
+
+<BaseLayout title="Articles — Han Zhengxin" description="Writing about AI, product strategy, and tech monetization." lang="en">
+  <div class="page-container">
+    <header class="post-list-header animate-fade-up">
+      <h1 class="post-list-title">Articles</h1>
+      <p class="post-list-meta">{sortedPosts.length} articles · AI, Product Strategy & Technical Practice</p>
+    </header>
+
+    {allTags.length > 0 && (
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px;" class="animate-fade-up delay-100">
+        <span class="post-tag" style="background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.3); color: var(--accent-light);">All</span>
+        {allTags.map(tag => (
+          <span class="post-tag">{tag}</span>
+        ))}
+      </div>
+    )}
+
+    <div>
+      {sortedPosts.map((post, i) => (
+        <article class="animate-fade-up" style={`animation-delay: ${i * 60}ms`}>
+          <a href={`/en/blog/${postIdToSlug(post.id)}`} class="post-card">
+            <div class="post-card-header">
+              <h2 class="post-card-title">{post.data.title}</h2>
+              <div class="post-card-arrow">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </div>
+            <p class="post-card-desc">{post.data.description}</p>
+            <div class="post-card-footer">
+              <span class="post-card-date">{formatDate(post.data.pubDate)}</span>
+              <span class="post-card-dot"></span>
+              {post.data.tags.map((tag, idx) => (
+                <span class="post-tag">
+                  {idx === 0 && <span class="tag-dot"></span>}
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    {sortedPosts.length === 0 && (
+      <p style="color: var(--text-muted); font-size: 14px; padding: 48px 0; text-align: center;">No articles yet. Stay tuned.</p>
+    )}
+  </div>
+</BaseLayout>

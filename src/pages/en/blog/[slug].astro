@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter(p => p.data.lang === 'en');
+  return posts.map(post => ({
+    params: { slug: post.id.replace(/\.(md|mdx)$/, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const tocItems = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout
+  title={`${post.data.title} — Han Zhengxin`}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  lang="en"
+>
+  <div class="page-container">
+    <div style="margin-bottom: 40px;" class="animate-fade-up">
+      <a href="/en/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;" class="group">
+        <svg style="width: 14px; height: 14px; transition: transform 0.15s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        Back to Articles
+      </a>
+    </div>
+
+    <header class="post-header animate-fade-up delay-100">
+      {post.data.tags.length > 0 && (
+        <div class="post-tags">
+          {post.data.tags.map(tag => (
+            <span class="post-tag-primary">{tag}</span>
+          ))}
+        </div>
+      )}
+      <h1 class="post-title">{post.data.title}</h1>
+      <div class="post-meta">
+        <time datetime={post.data.pubDate.toISOString()} style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">{formatDate(post.data.pubDate)}</time>
+        <span class="post-meta-sep">·</span>
+        <span style="font-size: 12px; color: var(--text-muted);">~{post.data.description.length * 2} words</span>
+      </div>
+    </header>
+
+    {tocItems.length > 0 && (
+      <div class="toc-container animate-fade-up delay-200">
+        <p class="toc-title">Table of Contents</p>
+        <ul class="toc-list">
+          {tocItems.map(h => (
+            <li style={h.depth === 3 ? 'padding-left: 12px;' : ''}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div class="prose animate-fade-up delay-300">
+      <Content />
+    </div>
+
+    <div class="author-card animate-fade-up delay-400">
+      <div class="author-avatar">H</div>
+      <div class="author-info">
+        <p class="author-name">Han Zhengxin</p>
+        <p class="author-bio">AI Product Manager. Writing about technology, products, and building things.</p>
+      </div>
+      <a href="mailto:hi@hanyiask.com" class="btn btn-outline" style="align-self: center; font-size: 12px;">Say Hi</a>
+    </div>
+
+    <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border);">
+      <a href="/en/blog" style="font-size: 12px; color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;">
+        ← Back to Articles
+      </a>
+    </div>
+  </div>
+</BaseLayout>

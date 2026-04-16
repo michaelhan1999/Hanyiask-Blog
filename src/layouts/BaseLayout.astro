@@ -12,7 +12,7 @@ interface Props {
   description?: string;
   pubDate?: Date;
   showSplash?: boolean;
-  lang?: 'zh' | 'tw';
+  lang?: 'zh' | 'tw' | 'en';
 }
 
 const {
@@ -24,12 +24,13 @@ const {
 } = Astro.props;
 
 const isTw = lang === 'tw';
-const base = isTw ? '/tw' : '';
+const isEn = lang === 'en';
+const base = isTw ? '/tw' : isEn ? '/en' : '';
 
 const navLinks = [
-  { href: `${base}/`, label: isTw ? '首頁' : '首页', icon: 'home' },
-  { href: `${base}/blog`, label: isTw ? '文章' : '文章', icon: 'blog' },
-  { href: `${base}/about`, label: isTw ? '關於' : '关于', icon: 'about' },
+  { href: `${base}/`, label: isEn ? 'Home' : isTw ? '首頁' : '首页', icon: 'home' },
+  { href: `${base}/blog`, label: isEn ? 'Blog' : isTw ? '文章' : '文章', icon: 'blog' },
+  { href: `${base}/about`, label: isEn ? 'About' : isTw ? '關於' : '关于', icon: 'about' },
 ];
 
 const pathname = Astro.url.pathname;
@@ -42,7 +43,7 @@ function isActive(href: string) {
 ---
 
 <!doctype html>
-<html lang={isTw ? 'zh-TW' : 'zh-CN'}>
+<html lang={isTw ? 'zh-TW' : isEn ? 'en' : 'zh-CN'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -75,7 +76,7 @@ function isActive(href: string) {
         <div class="sidebar-brand-logo">韩</div>
         <div>
           <div class="sidebar-brand-name">韩正新</div>
-          <div class="sidebar-brand-title">{isTw ? 'AI 產品經理' : 'AI 产品经理'}</div>
+          <div class="sidebar-brand-title">{isEn ? 'AI Product Manager' : isTw ? 'AI 產品經理' : 'AI 产品经理'}</div>
         </div>
       </div>
 
@@ -100,11 +101,11 @@ function isActive(href: string) {
         </div>
         <a href="mailto:hi@hanyiask.com" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          {isTw ? '傳送郵件' : '发送邮件'}
+          {isEn ? 'Email' : isTw ? '傳送郵件' : '发送邮件'}
         </a>
         <a href="https://github.com" target="_blank" rel="noopener" class="sidebar-footer-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          {isTw ? '原始碼' : '源代码'}
+          {isEn ? 'Source Code' : isTw ? '原始碼' : '源代码'}
         </a>
       </div>
     </aside>
@@ -117,7 +118,7 @@ function isActive(href: string) {
           <div class="sidebar-brand-name" style="font-size:12px;">韩正新</div>
         </div>
       </div>
-      <button class="mobile-menu-btn" id="menu-toggle" aria-label={isTw ? '選單' : '菜单'}>
+      <button class="mobile-menu-btn" id="menu-toggle" aria-label={isEn ? 'Menu' : isTw ? '選單' : '菜单'}>
         <span></span><span></span><span></span>
       </button>
     </header>

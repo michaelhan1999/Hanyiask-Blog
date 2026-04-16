@@ -1,107 +1,293 @@
 ---
-// 访客留言板 — Giscus (GitHub Discussions)
-// 需要配置：去 https://giscus.app 申请映射 token
+// 访客评论区 — 自建 D1 后端，无需登录
+const currentPath = Astro.url.pathname;
+
+// 从路径提取 slug，比如 /blog/hello-world → hello-world
+// /tw/blog/ai-pm-skills → ai-pm-skills
+// /en/blog/en-ai-pm-skills → en-ai-pm-skills
+let slug = 'home';
+if (currentPath.includes('/blog/')) {
+  slug = currentPath.split('/blog/')[1].replace(/\/$/, '') || 'home';
+} else if (currentPath.endsWith('/')) {
+  slug = currentPath.replace(/\//g, '-').replace(/^-/, '').replace(/-$/, '') || 'home';
+} else {
+  slug = currentPath.replace(/\//g, '-').replace(/^-/, '') || 'home';
+}
+
+const isTw = Astro.url.pathname.startsWith('/tw');
+const isEn = Astro.url.pathname.startsWith('/en');
+
+const lang = isEn ? 'en' : isTw ? 'tw' : 'zh';
+
+const labels = {
+  zh: {
+    title: '访客留言',
+    subtitle: '留下你的想法',
+    nickname: '昵称',
+    email: '邮箱（选填）',
+    content: '留言内容',
+    placeholder: '说点什么吧...',
+    submit: '发送留言',
+    submitting: '发送中...',
+    success: '留言成功！',
+    error: '发送失败，请重试',
+    empty: '暂无留言，来做第一个吧',
+    count: '条留言',
+    emailTip: '不会公开显示',
+    rules: '留言即代表同意友善交流，拒绝广告和链接'
+  },
+  tw: {
+    title: '訪客留言',
+    subtitle: '留下你的想法',
+    nickname: '暱稱',
+    email: '信箱（選填）',
+    content: '留言內容',
+    placeholder: '說點什麼吧...',
+    submit: '送出留言',
+    submitting: '傳送中...',
+    success: '留言成功！',
+    error: '傳送失敗，請重試',
+    empty: '暫無留言，來做第一個吧',
+    count: '條留言',
+    emailTip: '不會公開顯示',
+    rules: '留言即代表同意友善交流，拒絕廣告和連結'
+  },
+  en: {
+    title: 'Comments',
+    subtitle: 'Leave a message',
+    nickname: 'Nickname',
+    email: 'Email (optional)',
+    content: 'Content',
+    placeholder: 'Say something...',
+    submit: 'Submit',
+    submitting: 'Submitting...',
+    success: 'Submitted!',
+    error: 'Failed, please try again',
+    empty: 'No comments yet. Be the first!',
+    count: 'comments',
+    emailTip: 'Will not be displayed publicly',
+    rules: 'By commenting you agree to be civil and no advertising or links'
+  }
+};
+
+const l = labels[lang] || labels.zh;
 ---
 
-<section class="comments-section">
+<section class="comments-section" id="comments-section">
   <div class="comments-header">
     <div class="flex items-center gap-3">
       <span class="comments-dot"></span>
-      <h2 class="comments-title">访客留言</h2>
+      <h2 class="comments-title">{l.title}</h2>
+      <span class="comments-count" id="comments-count"></span>
     </div>
-    <p class="comments-subtitle">登录 GitHub 后可发表评论</p>
+    <p class="comments-subtitle">{l.subtitle}</p>
   </div>
 
-  <div class="giscus" id="comments"></div>
+  <!-- Comment Form -->
+  <form class="comment-form" id="comment-form">
+    <div class="form-row">
+      <input
+        type="text"
+        name="nickname"
+        id="comment-nickname"
+        placeholder={l.nickname}
+        maxlength="50"
+        required
+        class="form-input"
+      />
+      <input
+        type="email"
+        name="email"
+        id="comment-email"
+        placeholder={l.email}
+        maxlength="100"
+        class="form-input"
+      />
+    </div>
+    <textarea
+      name="content"
+      id="comment-content"
+      placeholder={l.placeholder}
+      maxlength="2000"
+      required
+      class="form-textarea"
+      rows="4"
+    ></textarea>
+    <div class="form-footer">
+      <p class="form-tip">{l.emailTip} · {l.rules}</p>
+      <button type="submit" class="btn btn-primary" id="comment-submit-btn">
+        {l.submit}
+      </button>
+    </div>
+    <div class="form-msg" id="comment-form-msg"></div>
+  </form>
+
+  <!-- Comments List -->
+  <div class="comments-list" id="comments-list">
+    <div class="comments-loading" id="comments-loading">
+      <div class="loading-spinner"></div>
+    </div>
+    <div class="comments-empty" id="comments-empty" style="display:none;">
+      <p>{l.empty}</p>
+    </div>
+    <div id="comments-items"></div>
+  </div>
 </section>
 
-<script>
-  // 访客统计
-  async function trackVisit() {
+<script define:vars={{ slug, lang, l }}>
+  const API_BASE = '/api/comments';
+
+  async function loadComments() {
     try {
-      await fetch('/api/visits', { method: 'POST' });
-    } catch {}
-  }
-  trackVisit();
+      const res = await fetch(`${API_BASE}?slug=${encodeURIComponent(slug)}&limit=100`);
+      const data = await res.json();
 
-  // Giscus 评论系统
-  function loadGiscus() {
-    const container = document.getElementById('comments');
-    if (!container) return;
+      const countEl = document.getElementById('comments-count');
+      const listEl = document.getElementById('comments-items');
+      const emptyEl = document.getElementById('comments-empty');
+      const loadingEl = document.getElementById('comments-loading');
 
-    const script = document.createElement('script');
-    script.src = 'https://giscus.app/client.js';
-    // ⚠️ 以下配置需要替换为你自己的 giscus 映射信息
-    // 访问 https://giscus.app 获取你的配置
-    script.setAttribute('data-repo', 'YOUR_GITHUB_USERNAME/YOUR_REPO');
-    script.setAttribute('data-repo-id', 'YOUR_REPO_ID');
-    script.setAttribute('data-category', 'Announcements');
-    script.setAttribute('data-category-id', 'YOUR_CATEGORY_ID');
-    script.setAttribute('data-mapping', 'pathname');
-    script.setAttribute('data-strict', '0');
-    script.setAttribute('data-reactions-enabled', '1');
-    script.setAttribute('data-emit-metadata', '0');
-    script.setAttribute('data-input-position', 'top');
-    script.setAttribute('data-theme', 'dark');
-    script.setAttribute('data-lang', 'zh-CN');
-    script.setAttribute('data-loading', 'lazy');
-    script.crossOrigin = 'anonymous';
-    script.async = true;
-    container.appendChild(script);
+      loadingEl.style.display = 'none';
+
+      if (!data.comments || data.comments.length === 0) {
+        emptyEl.style.display = 'block';
+        countEl.textContent = `0 ${l.count}`;
+        return;
+      }
+
+      countEl.textContent = `${data.total} ${l.count}`;
+      listEl.innerHTML = data.comments.map(c => `
+        <div class="comment-item">
+          <div class="comment-avatar">${escapeHtml(c.nickname.charAt(0).toUpperCase())}</div>
+          <div class="comment-body">
+            <div class="comment-meta">
+              <span class="comment-author">${escapeHtml(c.nickname)}</span>
+              <span class="comment-date">${formatDate(c.created_at, lang)}</span>
+            </div>
+            <div class="comment-content-text">${escapeHtml(c.content)}</div>
+          </div>
+        </div>
+      `).join('');
+    } catch (e) {
+      document.getElementById('comments-loading').style.display = 'none';
+      document.getElementById('comments-empty').style.display = 'block';
+    }
   }
 
-  // 等页面加载完再初始化
-  if (document.readyState === 'complete') {
-    loadGiscus();
-  } else {
-    window.addEventListener('load', loadGiscus);
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+
+  function formatDate(dateStr, lang) {
+    const d = new Date(dateStr);
+    if (lang === 'en') {
+      return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    }
+    return d.toLocaleDateString(lang === 'tw' ? 'zh-TW' : 'zh-CN', { year:'numeric', month:'short', day:'numeric' });
+  }
+
+  document.getElementById('comment-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('comment-submit-btn');
+    const msgEl = document.getElementById('comment-form-msg');
+    const nickname = document.getElementById('comment-nickname').value.trim();
+    const email = document.getElementById('comment-email').value.trim();
+    const content = document.getElementById('comment-content').value.trim();
+
+    if (!nickname || !content) return;
+    btn.disabled = true;
+    btn.textContent = l.submitting;
+    msgEl.textContent = '';
+
+    try {
+      const res = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug, nickname, email, content })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        msgEl.textContent = '✓ ' + l.success;
+        msgEl.className = 'form-msg success';
+        document.getElementById('comment-form').reset();
+        document.getElementById('comments-empty').style.display = 'none';
+        loadComments();
+      } else {
+        msgEl.textContent = '✗ ' + (data.error || l.error);
+        msgEl.className = 'form-msg error';
+      }
+    } catch {
+      msgEl.textContent = '✗ ' + l.error;
+      msgEl.className = 'form-msg error';
+    }
+
+    btn.disabled = false;
+    btn.textContent = l.submit;
+  });
+
+  loadComments();
 </script>
 
 <style>
-  .comments-section {
-    margin-top: 64px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-  }
+  .comments-section { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--border); }
 
-  .comments-header {
-    margin-bottom: 24px;
-  }
-
+  .comments-header { margin-bottom: 24px; }
   .flex { display: flex; }
   .items-center { align-items: center; }
   .gap-3 { gap: 12px; }
 
   .comments-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #10B981;
-    box-shadow: 0 0 8px rgba(16,185,129,0.6);
-    animation: commentPulse 2.5s ease-in-out infinite;
-    flex-shrink: 0;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.6);
+    animation: commentPulse 2.5s ease-in-out infinite; flex-shrink: 0;
   }
-
   @keyframes commentPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
   }
 
-  .comments-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
+  .comments-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .comments-count { font-size: 12px; color: var(--text-muted); margin-left: 4px; }
+  .comments-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-  .comments-subtitle {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 4px;
+  .comment-form { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .form-input {
+    flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; color: var(--text-primary); font-size: 14px; font-family: inherit;
+    transition: border-color 0.15s; outline: none;
   }
+  .form-input:focus { border-color: var(--accent); }
+  .form-input::placeholder { color: var(--text-muted); }
+  .form-textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; color: var(--text-primary); font-size: 14px; font-family: inherit;
+    resize: vertical; min-height: 100px; transition: border-color 0.15s; outline: none; box-sizing: border-box;
+  }
+  .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea::placeholder { color: var(--text-muted); }
+  .form-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; flex-wrap: wrap; gap: 8px; }
+  .form-tip { font-size: 11px; color: var(--text-muted); margin: 0; }
+  .form-msg { font-size: 13px; margin-top: 10px; padding: 8px 12px; border-radius: 6px; display: none; }
+  .form-msg.success { background: rgba(16,185,129,0.1); color: #10B981; display: block; }
+  .form-msg.error { background: rgba(239,68,68,0.1); color: #EF4444; display: block; }
 
-  /* Giscus iframe 主题适配 */
-  .giscus-frame {
-    border: none !important;
+  .comments-list { min-height: 60px; }
+  .comments-loading { display: flex; justify-content: center; padding: 24px; }
+  .loading-spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .comments-empty { text-align: center; padding: 32px 0; color: var(--text-muted); font-size: 14px; }
+
+  .comment-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+    color: #fff; flex-shrink: 0;
   }
+  .comment-body { flex: 1; min-width: 0; }
+  .comment-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .comment-author { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .comment-date { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+  .comment-content-text { font-size: 14px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 </style>
