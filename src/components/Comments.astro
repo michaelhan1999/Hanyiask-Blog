@@ -139,27 +139,35 @@ const l = labels[lang] || labels.zh;
 
   // 生成单条评论的完整 HTML
   function buildCommentHTML(c, l, lang) {
-    const initials = escapeHtml(c.nickname.charAt(0).toUpperCase());
     const nickname = escapeHtml(c.nickname);
     const date = formatDate(c.created_at, lang);
     const content = escapeHtml(c.content).replace(/\n/g, '<br>');
-    const avatarColors = ['#6366F1','#EC4899','#10B981','#F59E0B','#3B82F6','#8B5CF6','#EF4444'];
-    const colorIdx = c.nickname.charCodeAt(0) % avatarColors.length;
-    const avatarBg = avatarColors[colorIdx];
     const isOwner = nickname === '韩正新' || nickname === '博主';
-    const badge = isOwner ? `<span class="comment-badge-owner">${lang==='en'?'Author':'博主'}</span>` : '';
 
-    return `
-      <div class="comment-item" id="comment-${c.id}">
-        <div class="comment-avatar" style="background:${avatarBg}">${initials}</div>
-        <div class="comment-body">
-          <div class="comment-meta">
-            <span class="comment-author">${nickname}</span>${badge}
-            <span class="comment-date">${date}</span>
+    if (isOwner) {
+      return `
+        <div class="comment-item" id="comment-${c.id}">
+          <div class="comment-owner-dot"></div>
+          <div class="comment-body">
+            <div class="comment-meta">
+              <span class="comment-author">${nickname}：</span>
+              <span class="comment-date">${date}</span>
+            </div>
+            <div class="comment-content-text">${content}</div>
           </div>
-          <div class="comment-content-text">${content}</div>
-        </div>
-      </div>`;
+        </div>`;
+    } else {
+      return `
+        <div class="comment-item" id="comment-${c.id}">
+          <div class="comment-body">
+            <div class="comment-meta">
+              <span class="comment-author">${nickname}：</span>
+              <span class="comment-date">${date}</span>
+            </div>
+            <div class="comment-content-text">${content}</div>
+          </div>
+        </div>`;
+    }
   }
 
   async function loadComments() {
@@ -293,38 +301,33 @@ const l = labels[lang] || labels.zh;
   .comments-empty { text-align: center; padding: 32px 0; color: var(--text-muted); font-size: 14px; }
 
   .comment-item {
-    display: flex; gap: 14px; padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
   }
   .comment-item:last-child { border-bottom: none; }
-  .comment-item:first-child { padding-top: 0; }
 
-  .comment-avatar {
-    width: 42px; height: 42px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 16px; color: #fff; flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    letter-spacing: 0;
+  .comment-owner-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 7px;
+    background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.6);
+    animation: commentPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes commentPulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
   }
 
   .comment-body { flex: 1; min-width: 0; }
 
   .comment-meta {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;
   }
-  .comment-author { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-  .comment-badge-owner {
-    font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 20px;
-    background: var(--accent); color: #fff; letter-spacing: 0.5px;
-  }
+  .comment-author { font-size: 13px; font-weight: 600; color: var(--text-primary); }
   .comment-date {
     font-size: 11px; color: var(--text-muted);
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
   }
 
   .comment-content-text {
-    font-size: 14px; color: var(--text-secondary); line-height: 1.75;
+    font-size: 13px; color: var(--text-secondary); line-height: 1.7;
     white-space: pre-wrap; word-break: break-word; margin: 0;
   }
 </style>
